@@ -16,7 +16,8 @@ backend/.strapi/
 backend/.strapi-updater.json
 backend/dist/
 backend/build/
-backend/public/uploads/
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
 
 # Sistema / editor
 .DS_Store
