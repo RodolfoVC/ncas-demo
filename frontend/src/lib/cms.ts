@@ -41,6 +41,26 @@ function unwrap<T>(items: any[]): T[] {
   return items.map((item) => (item.attributes ? { id: item.id, ...item.attributes } : item));
 }
 
+// Convierte la URL relativa que devuelve Strapi para un archivo (ej. "/uploads/foto.png")
+// en una URL absoluta apuntando al backend. Si ya viene absoluta (ej. un proveedor cloud
+// tipo S3/Cloudinary), la deja tal cual.
+function getMediaUrl(url: string | undefined | null): string | null {
+  if (!url) return null;
+  return url.startsWith('http') ? url : `${STRAPI_URL}${url}`;
+}
+
+// Un campo de tipo "media" (single) puede venir plano (Strapi 5) o anidado bajo
+// { data: { ...} } (formato heredado de Strapi 4) — se manejan ambos casos.
+function extractMedia(field: any): { url: string; thumbnailUrl?: string } | null {
+  const media = field?.data ?? field;
+  if (!media) return null;
+  const attrs = media.attributes ?? media;
+  const url = getMediaUrl(attrs.url);
+  if (!url) return null;
+  const thumbnailUrl = getMediaUrl(attrs.formats?.thumbnail?.url) ?? url;
+  return { url, thumbnailUrl };
+}
+
 export async function getTestimonios(): Promise<Testimonio[]> {
   const data = await fetchAPI('/testimonios');
   return unwrap<Testimonio>(data);
@@ -50,16 +70,29 @@ export async function getProyectos(): Promise<Proyecto[]> {
   const data = await fetchAPI('/proyectos');
   return unwrap<Proyecto>(data);
 }
+
 export interface Miembro {
   id: number;
   nombre: string;
   cargo: string;
+  fotoUrl: string | null;
+  fotoThumbnailUrl: string | null;
 }
 
 export async function getEquipo(): Promise<Miembro[]> {
-  const data = await fetchAPI('/equipos');
-  return unwrap<Miembro>(data);
+  const data = await fetchAPI('/equipos?populate=foto');
+  return unwrap<any>(data).map((m: any) => {
+    const foto = extractMedia(m.foto);
+    return {
+      id: m.id,
+      nombre: m.nombre,
+      cargo: m.cargo,
+      fotoUrl: foto?.url ?? null,
+      fotoThumbnailUrl: foto?.thumbnailUrl ?? null,
+    };
+  });
 }
+
 export async function getPosts(): Promise<Post[]> {
   const data = await fetchAPI('/posts?sort=fecha:desc');
   return unwrap<Post>(data);

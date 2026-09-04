@@ -1,32 +1,37 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getEquipo } from '../lib/cms';
-
 let equipo = [];
 let cmsError: string | null = null;
-try {
-  equipo = await getEquipo();
-} catch (e) {
-  cmsError = e instanceof Error ? e.message : 'No se pudo conectar con el CMS';
-}
+try { equipo = await getEquipo(); } catch (e) { cmsError = e instanceof Error ? e.message : 'No se pudo conectar con el CMS'; }
 ---
-<Base title="Equipo">
+<Base title="Equipo" description="Conoce al equipo de NCAS.">
   <section class="max-w-5xl mx-auto px-6 py-16">
     <h1 class="text-3xl font-bold mb-2">Equipo</h1>
     <p class="text-sm text-slate-500 mb-8">Contenido editable desde el panel de Strapi — módulo "Equipo".</p>
-    {cmsError ? (
-      <p class="text-red-600 text-sm">No se pudo cargar desde el CMS: {cmsError}</p>
-    ) : equipo.length === 0 ? (
-      <p class="text-slate-500 text-sm">Aún no hay miembros del equipo cargados.</p>
-    ) : (
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {equipo.map((m: any) => (
-          <div class="border border-slate-200 rounded-lg p-5">
-            <h3 class="font-semibold text-brand-dark">{m.nombre}</h3>
-            <p class="text-sm text-slate-600">{m.cargo}</p>
-          </div>
-        ))}
-      </div>
-    )}
+    {cmsError ? (<p class="text-red-600 text-sm">No se pudo cargar desde el CMS: {cmsError}</p>)
+     : equipo.length === 0 ? (<p class="text-slate-500 text-sm">Aún no hay miembros del equipo cargados.</p>)
+     : (<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+         {equipo.map((m: any) => (
+           <div class="border border-slate-200 rounded-lg p-5 flex flex-col items-center text-center">
+             {m.fotoThumbnailUrl ? (
+               <img
+                 src={m.fotoThumbnailUrl}
+                 alt={`Foto de ${m.nombre}`}
+                 width="96"
+                 height="96"
+                 loading="lazy"
+                 class="w-24 h-24 rounded-full object-cover mb-4 border border-slate-200"
+               />
+             ) : (
+               <div class="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center mb-4 text-slate-400 text-2xl font-semibold">
+                 {m.nombre?.charAt(0)}
+               </div>
+             )}
+             <h3 class="font-semibold text-brand-dark">{m.nombre}</h3>
+             <p class="text-sm text-slate-600">{m.cargo}</p>
+           </div>
+         ))}
+       </div>)}
   </section>
 </Base>

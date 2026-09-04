@@ -3,9 +3,15 @@ import '../styles/global.css';
 
 interface Props {
   title: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
+const {
+  title,
+  description = 'NCAS — ecosistemas tecnológicos escalables, mantenibles y robustos. Software a medida, hardware, soporte, integración y consultoría.',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
 <html lang="es">
@@ -13,6 +19,17 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} · NCAS (demo)</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${title} · NCAS (demo)`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={`${title} · NCAS (demo)`} />
+    <meta name="twitter:description" content={description} />
   </head>
   <body class="min-h-screen bg-white text-slate-800 flex flex-col">
     <header class="border-b border-slate-200">
