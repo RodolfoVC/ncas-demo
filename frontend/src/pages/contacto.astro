@@ -1,15 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
+
+// En local, si no defines PUBLIC_TURNSTILE_SITE_KEY, se usa la site key de
+// pruebas de Cloudflare que siempre pasa la verificacion (util para desarrollar
+// sin depender de una cuenta real). En produccion, Cloudflare Pages inyecta la
+// site key real via variable de entorno.
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
 ---
 <Base title="Contacto" description="Contáctanos para conversar sobre tu proyecto de software o hardware a medida.">
   <section class="max-w-2xl mx-auto px-6 py-16">
     <h1 class="text-3xl font-bold mb-2">Contacto</h1>
     <p class="text-sm text-slate-500 mb-8">
-      Formulario de demostración. En producción, este formulario se conectaría a una función serverless
-      (endpoint <code>/api/contacto</code>) protegida con Cloudflare Turnstile, como se describe en la
-      recomendación de stack.
+      Este formulario está protegido con Cloudflare Turnstile y guarda los mensajes como un
+      módulo autoadministrable más en Strapi (visible desde el panel de administración).
     </p>
-    <form class="space-y-4" onsubmit="event.preventDefault(); alert('Demo: aquí se enviaría el formulario a /api/contacto');">
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <form id="contact-form" class="space-y-4">
       <div>
         <label class="block text-sm font-medium mb-1" for="nombre">Nombre</label>
         <input class="w-full border border-slate-300 rounded-md px-3 py-2" type="text" id="nombre" name="nombre" required />
@@ -22,7 +30,68 @@ import Base from '../layouts/Base.astro';
         <label class="block text-sm font-medium mb-1" for="mensaje">Mensaje</label>
         <textarea class="w-full border border-slate-300 rounded-md px-3 py-2" id="mensaje" name="mensaje" rows="5" required></textarea>
       </div>
-      <button class="bg-brand text-white font-medium px-5 py-2 rounded-md hover:bg-brand-dark" type="submit">Enviar</button>
+
+      <div class="cf-turnstile" data-sitekey={siteKey}></div>
+
+      <button
+        class="bg-brand text-white font-medium px-5 py-2 rounded-md hover:bg-brand-dark disabled:opacity-50"
+        type="submit"
+        id="submit-btn"
+      >
+        Enviar
+      </button>
+      <p id="form-status" class="text-sm mt-2" role="status"></p>
     </form>
   </section>
+
+  <script>
+    const form = document.querySelector('#contact-form') as HTMLFormElement;
+    const statusEl = document.querySelector('#form-status') as HTMLParagraphElement;
+    const submitBtn = document.querySelector('#submit-btn') as HTMLButtonElement;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const turnstileToken = formData.get('cf-turnstile-response');
+
+      if (!turnstileToken) {
+        statusEl.textContent = 'Completa la verificación de seguridad antes de enviar.';
+        statusEl.className = 'text-sm mt-2 text-red-600';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      statusEl.textContent = 'Enviando...';
+      statusEl.className = 'text-sm mt-2 text-slate-500';
+
+      try {
+        const res = await fetch('/api/contacto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre: formData.get('nombre'),
+            email: formData.get('email'),
+            mensaje: formData.get('mensaje'),
+            turnstileToken,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'No se pudo enviar el mensaje.');
+
+        statusEl.textContent = '¡Mensaje enviado! Te contactaremos pronto.';
+        statusEl.className = 'text-sm mt-2 text-green-600';
+        form.reset();
+        // @ts-ignore - turnstile se carga globalmente desde el script externo
+        if (window.turnstile) window.turnstile.reset();
+      } catch (err) {
+        statusEl.textContent = err instanceof Error ? err.message : 'Ocurrió un error al enviar el mensaje.';
+        statusEl.className = 'text-sm mt-2 text-red-600';
+        // @ts-ignore
+        if (window.turnstile) window.turnstile.reset();
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
 </Base>

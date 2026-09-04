@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mensajes_contacto",
+  "info": {
+    "singularName": "mensaje-contacto",
+    "pluralName": "mensaje-contactos",
+    "displayName": "Mensaje de contacto",
+    "description": "Mensajes enviados desde el formulario de contacto del sitio, verificados con Cloudflare Turnstile."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "mensaje": {
+      "type": "text",
+      "required": true,
+      "maxLength": 2000
+    },
+    "leido": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

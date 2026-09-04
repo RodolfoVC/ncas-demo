@@ -399,6 +399,43 @@ export interface ApiEquipoEquipo extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiMensajeContactoMensajeContacto
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'mensajes_contacto';
+  info: {
+    description: 'Mensajes enviados desde el formulario de contacto del sitio, verificados con Cloudflare Turnstile.';
+    displayName: 'Mensaje de contacto';
+    pluralName: 'mensaje-contactos';
+    singularName: 'mensaje-contacto';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    leido: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::mensaje-contacto.mensaje-contacto'
+    > &
+      Schema.Attribute.Private;
+    mensaje: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 2000;
+      }>;
+    nombre: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPostPost extends Struct.CollectionTypeSchema {
   collectionName: 'posts';
   info: {
@@ -1016,6 +1053,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::equipo.equipo': ApiEquipoEquipo;
+      'api::mensaje-contacto.mensaje-contacto': ApiMensajeContactoMensajeContacto;
       'api::post.post': ApiPostPost;
       'api::proyecto.proyecto': ApiProyectoProyecto;
       'api::testimonio.testimonio': ApiTestimonioTestimonio;
