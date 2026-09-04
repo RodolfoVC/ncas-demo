@@ -10,6 +10,13 @@
 
 const { createStrapi } = require('@strapi/strapi');
 
+const servicios = [
+  { nombre: 'Software', descripcion: 'Desarrollo a medida para aplicaciones móviles, escritorio, web, smart TV y equipos periféricos.', icono: 'software', orden: 1 },
+  { nombre: 'Hardware', descripcion: 'Desarrollo de hardware a medida con calidad y resistencia industrial o prototipos.', icono: 'hardware', orden: 2 },
+  { nombre: 'Soporte', descripcion: 'Soporte evolutivo y correctivo de aplicaciones, servicios, infraestructura y periféricos.', icono: 'soporte', orden: 3 },
+  { nombre: 'Integraciones', descripcion: 'Integraciones de software y hardware con distintas aplicaciones o APIs públicas y privadas.', icono: 'integraciones', orden: 4 },
+];
+
 const testimonios = [
   { nombre: 'Equipo de Operaciones', empresa: 'Tren Central', cita: 'NCAS entendió nuestro problema de integración de sistemas y entregó una solución robusta que seguimos usando hoy.' },
   { nombre: 'Jefatura de TI', empresa: 'Metro Valparaíso', cita: 'El soporte evolutivo de NCAS nos permitió escalar sin reescribir todo desde cero.' },
@@ -40,6 +47,16 @@ const posts = [
 
 async function seed() {
   const app = await createStrapi().load();
+
+  for (const s of servicios) {
+    const exists = await app.documents('api::servicio.servicio').findMany({
+      filters: { nombre: s.nombre },
+    });
+    if (!exists.length) {
+      await app.documents('api::servicio.servicio').create({ data: s, status: 'published' });
+      console.log(`Servicio creado: ${s.nombre}`);
+    }
+  }
 
   for (const t of testimonios) {
     const exists = await app.documents('api::testimonio.testimonio').findMany({

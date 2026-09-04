@@ -12,6 +12,14 @@ async function fetchAPI(path: string) {
   return json.data;
 }
 
+export interface Servicio {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  icono: 'software' | 'hardware' | 'soporte' | 'integraciones';
+  orden: number;
+}
+
 export interface Testimonio {
   id: number;
   nombre: string;
@@ -59,6 +67,11 @@ function extractMedia(field: any): { url: string; thumbnailUrl?: string } | null
   if (!url) return null;
   const thumbnailUrl = getMediaUrl(attrs.formats?.thumbnail?.url) ?? url;
   return { url, thumbnailUrl };
+}
+
+export async function getServicios(): Promise<Servicio[]> {
+  const data = await fetchAPI('/servicios?sort=orden:asc');
+  return unwrap<Servicio>(data);
 }
 
 export async function getTestimonios(): Promise<Testimonio[]> {

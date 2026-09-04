@@ -10,7 +10,7 @@ module.exports = {
    * autenticación, tal como lo haría cualquier sitio público.
    */
   async bootstrap({ strapi }) {
-    const PUBLIC_READ_APIS = ['api::post.post', 'api::testimonio.testimonio', 'api::proyecto.proyecto'];
+    const PUBLIC_READ_APIS = ['api::post.post', 'api::testimonio.testimonio', 'api::proyecto.proyecto', 'api::servicio.servicio'];
 
     const publicRole = await strapi
       .query('plugin::users-permissions.role')
@@ -20,13 +20,14 @@ module.exports = {
 
     for (const uid of PUBLIC_READ_APIS) {
       for (const action of ['find', 'findOne']) {
-        const permission = await strapi.query('plugin::users-permissions.permission').findOne({
-          where: { role: publicRole.id, action: `${uid}.${action}` },
+        const actionName = `${uid}.${action}`;
+        const existing = await strapi.query('plugin::users-permissions.permission').findOne({
+          where: { role: publicRole.id, action: actionName },
         });
-        if (permission && !permission.enabled) {
-          await strapi
-            .query('plugin::users-permissions.permission')
-            .update({ where: { id: permission.id }, data: { enabled: true } });
+        if (!existing) {
+          await strapi.query('plugin::users-permissions.permission').create({
+            data: { action: actionName, role: publicRole.id },
+          });
         }
       }
     }

@@ -1,16 +1,28 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getTestimonios, getProyectos } from '../lib/cms';
+import MapaSudamerica from '../components/MapaSudamerica.astro';
+import { getServicios, getTestimonios, getProyectos } from '../lib/cms';
+import type { Servicio } from '../lib/cms';
 
+let servicios: Servicio[] = [];
 let testimonios = [];
 let proyectos = [];
 let cmsError: string | null = null;
 
 try {
-  [testimonios, proyectos] = await Promise.all([getTestimonios(), getProyectos()]);
+  [servicios, testimonios, proyectos] = await Promise.all([getServicios(), getTestimonios(), getProyectos()]);
 } catch (e) {
   cmsError = e instanceof Error ? e.message : 'No se pudo conectar con el CMS';
 }
+
+// Cada tarjeta de "Servicios" trae un ícono predefinido desde Strapi (campo "icono");
+// el SVG en sí se mantiene acá en el código para no aceptar HTML libre desde el CMS.
+const ICONOS: Record<string, string> = {
+  software: '<path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13.5 6l-3 12"></path>',
+  hardware: '<rect x="7" y="7" width="10" height="10" rx="1.6"></rect><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"></path>',
+  soporte: '<path d="M4 13v-1a8 8 0 0 1 16 0v1"></path><rect x="2.3" y="13" width="4" height="6.5" rx="1.6"></rect><rect x="17.7" y="13" width="4" height="6.5" rx="1.6"></rect>',
+  integraciones: '<circle cx="6" cy="6" r="2.4"></circle><circle cx="18" cy="6" r="2.4"></circle><circle cx="12" cy="18" r="2.4"></circle><path d="M8.1 7.3L11 16M15.9 7.3L13 16M8.4 6h7.2"></path>',
+};
 ---
 <Base title="Inicio" description="NCAS: ecosistemas tecnológicos escalables, mantenibles y robustos. Software y hardware a medida, soporte, integración y consultoría.">
   <!-- HERO -->
@@ -43,36 +55,21 @@ try {
       <h2 class="text-3xl md:text-4xl font-extrabold mt-3">Cómo podemos apoyarte</h2>
       <p class="text-muted max-w-xl mt-3">Soluciones integrales para lograr ecosistemas de tecnología escalables, mantenibles, robustos y con alta disponibilidad.</p>
 
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
-        <div class="dots bg-card border border-white/10 rounded-2xl p-7">
-          <div class="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center text-accent">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13.5 6l-3 12"></path></svg>
-          </div>
-          <h3 class="font-bold mt-4">Software</h3>
-          <p class="text-sm text-muted mt-2 leading-relaxed">Desarrollo a medida para aplicaciones móviles, escritorio, web, smart TV y equipos periféricos.</p>
+      {servicios.length > 0 ? (
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
+          {servicios.map((s) => (
+            <div class="dots bg-card border border-white/10 rounded-2xl p-7">
+              <div class="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center text-accent">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" set:html={ICONOS[s.icono] ?? ICONOS.software}></svg>
+              </div>
+              <h3 class="font-bold mt-4">{s.nombre}</h3>
+              <p class="text-sm text-muted mt-2 leading-relaxed">{s.descripcion}</p>
+            </div>
+          ))}
         </div>
-        <div class="dots bg-card border border-white/10 rounded-2xl p-7">
-          <div class="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center text-accent">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.6"></rect><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"></path></svg>
-          </div>
-          <h3 class="font-bold mt-4">Hardware</h3>
-          <p class="text-sm text-muted mt-2 leading-relaxed">Desarrollo de hardware a medida con calidad y resistencia industrial o prototipos.</p>
-        </div>
-        <div class="dots bg-card border border-white/10 rounded-2xl p-7">
-          <div class="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center text-accent">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"></path><rect x="2.3" y="13" width="4" height="6.5" rx="1.6"></rect><rect x="17.7" y="13" width="4" height="6.5" rx="1.6"></rect></svg>
-          </div>
-          <h3 class="font-bold mt-4">Soporte</h3>
-          <p class="text-sm text-muted mt-2 leading-relaxed">Soporte evolutivo y correctivo de aplicaciones, servicios, infraestructura y periféricos.</p>
-        </div>
-        <div class="dots bg-card border border-white/10 rounded-2xl p-7">
-          <div class="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center text-accent">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.4"></circle><circle cx="18" cy="6" r="2.4"></circle><circle cx="12" cy="18" r="2.4"></circle><path d="M8.1 7.3L11 16M15.9 7.3L13 16M8.4 6h7.2"></path></svg>
-          </div>
-          <h3 class="font-bold mt-4">Integraciones</h3>
-          <p class="text-sm text-muted mt-2 leading-relaxed">Integraciones de software y hardware con distintas aplicaciones o APIs públicas y privadas.</p>
-        </div>
-      </div>
+      ) : (
+        <p class="text-muted text-sm mt-10">Aún no hay servicios cargados en el CMS.</p>
+      )}
     </div>
   </section>
 
@@ -108,7 +105,7 @@ try {
       ) : proyectos.length === 0 ? (
         <p class="text-muted text-sm mt-6">Aún no hay proyectos cargados en el CMS.</p>
       ) : (
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
           {proyectos.map((p: any) => (
             <div class="bg-card border border-white/10 border-t-2 rounded-xl p-6" style="border-top-color:#2ABEEF;">
               <span class="font-mono text-xs uppercase tracking-wide text-accent2 font-semibold">{p.industria}</span>
@@ -121,4 +118,66 @@ try {
       <a href="/proyectos" class="inline-flex items-center gap-2 text-accent2 font-bold text-sm mt-8">Ver todos los proyectos →</a>
     </div>
   </section>
+
+    <!-- CONSULTORÍA -->
+  <section class="px-6 py-20 md:py-24 bg-panel border-y border-white/10">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+      <div>
+        <span class="font-mono text-xs font-semibold text-accent tracking-wide">CONSULTORÍA</span>
+        <h2 class="text-3xl font-extrabold mt-3 leading-tight">Podemos asesorarte en tu digitalización</h2>
+        <p class="text-muted mt-4 leading-relaxed">Nuestras consultorías integrales en ingeniería y tecnologías de la información abordan desde infraestructura y arquitectura hasta gestión de equipos de alto rendimiento.</p>
+      </div>
+      <div class="dots bg-card border border-white/10 rounded-2xl p-8 flex flex-col gap-6">
+        <div class="flex gap-3.5 items-start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-accent shrink-0 mt-0.5"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span class="text-sm text-ink/90 leading-relaxed">Migración de sistemas monolíticos a microservicios.</span>
+        </div>
+        <div class="flex gap-3.5 items-start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-accent shrink-0 mt-0.5"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span class="text-sm text-ink/90 leading-relaxed">Captura de requerimientos, puntos de control, excepciones y casos borde.</span>
+        </div>
+        <div class="flex gap-3.5 items-start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-accent shrink-0 mt-0.5"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span class="text-sm text-ink/90 leading-relaxed">Implementación de infraestructura local o como servicio.</span>
+        </div>
+        <div class="flex gap-3.5 items-start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-accent shrink-0 mt-0.5"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span class="text-sm text-ink/90 leading-relaxed">Digitalización y automatización de procesos por IoT o APIs centralizadas.</span>
+        </div>
+        <div class="flex gap-3.5 items-start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-accent shrink-0 mt-0.5"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span class="text-sm text-ink/90 leading-relaxed">Capacitación y consultoría en TI e ingeniería.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+    <!-- PRESENCIA -->
+  <section class="px-6 py-20 border-y border-white/10">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="font-mono text-xs font-semibold text-accent2 tracking-wide">PRESENCIA</span>
+        <h2 class="text-3xl font-extrabold mt-3">Presencia en Sudamérica</h2>
+        <p class="text-muted mt-4 leading-relaxed">Operamos con equipos y proyectos activos en 6 países de la región.</p>
+        <div class="flex flex-wrap gap-2.5 mt-6">
+          <span class="font-mono text-xs bg-white/5 border border-white/10 rounded-full px-3.5 py-1.5 text-ink/90">Chile</span>
+          <span class="font-mono text-xs bg-white/5 border border-white/10 rounded-full px-3.5 py-1.5 text-ink/90">Argentina</span>
+          <span class="font-mono text-xs bg-white/5 border border-white/10 rounded-full px-3.5 py-1.5 text-ink/90">Brasil</span>
+          <span class="font-mono text-xs bg-white/5 border border-white/10 rounded-full px-3.5 py-1.5 text-ink/90">Colombia</span>
+          <span class="font-mono text-xs bg-white/5 border border-white/10 rounded-full px-3.5 py-1.5 text-ink/90">Perú</span>
+          <span class="font-mono text-xs bg-white/5 border border-white/10 rounded-full px-3.5 py-1.5 text-ink/90">Bolivia</span>
+        </div>
+      </div>
+      <MapaSudamerica />
+    </div>
+  </section>
+    <!-- CTA CONTACTO -->
+  <section class="relative overflow-hidden px-6 py-24 md:py-28 text-center">
+    <div class="absolute -top-48 left-1/2 -translate-x-1/2 w-[500px] h-[320px] md:w-[800px] md:h-[500px] rounded-full pointer-events-none" style="background: radial-gradient(circle, #EF5D2C2e 0%, transparent 72%);"></div>
+    <div class="relative z-10">
+      <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">¿Tienes un proyecto en mente?</h2>
+      <p class="text-muted mt-4 max-w-md mx-auto">Cuéntanos qué necesitas construir.</p>
+      <a href="/contacto" class="inline-block mt-8 bg-accent text-night font-extrabold text-sm px-8 py-4 rounded-lg">Contáctanos</a>
+    </div>
+  </section>
 </Base>
+

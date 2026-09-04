@@ -507,6 +507,46 @@ export interface ApiProyectoProyecto extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiServicioServicio extends Struct.CollectionTypeSchema {
+  collectionName: 'servicios';
+  info: {
+    description: 'Tarjetas de la secci\u00F3n "C\u00F3mo podemos apoyarte" del home, editables sin ayuda de desarrollo.';
+    displayName: 'Servicio';
+    pluralName: 'servicios';
+    singularName: 'servicio';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
+    icono: Schema.Attribute.Enumeration<
+      ['software', 'hardware', 'soporte', 'integraciones']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'software'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::servicio.servicio'
+    > &
+      Schema.Attribute.Private;
+    nombre: Schema.Attribute.String & Schema.Attribute.Required;
+    orden: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiTestimonioTestimonio extends Struct.CollectionTypeSchema {
   collectionName: 'testimonios';
   info: {
@@ -1056,6 +1096,7 @@ declare module '@strapi/strapi' {
       'api::mensaje-contacto.mensaje-contacto': ApiMensajeContactoMensajeContacto;
       'api::post.post': ApiPostPost;
       'api::proyecto.proyecto': ApiProyectoProyecto;
+      'api::servicio.servicio': ApiServicioServicio;
       'api::testimonio.testimonio': ApiTestimonioTestimonio;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
