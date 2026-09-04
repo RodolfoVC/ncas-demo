@@ -77,7 +77,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000000000000
           }),
         });
         const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'No se pudo enviar el mensaje.');
+        if (!res.ok) throw new Error((data.error || 'No se pudo enviar el mensaje.') + (data.debug ? ' [' + JSON.stringify(data.debug) + ']' : ''));
 
         statusEl.textContent = '¡Mensaje enviado! Te contactaremos pronto.';
         statusEl.className = 'text-sm mt-2 text-green-600';
