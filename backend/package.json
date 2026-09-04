@@ -1,0 +1,27 @@
+{
+  "name": "ncas-demo-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "CMS headless (Strapi) para los módulos autoadministrables de NCAS: Blog, Testimonios, Proyectos",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "seed": "node scripts/seed.js"
+  },
+  "dependencies": {
+    "@strapi/strapi": "5.10.1",
+    "@strapi/plugin-users-permissions": "5.10.1",
+    "better-sqlite3": "11.3.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "styled-components": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x"
+  },
+  "strapi": {
+    "uuid": "ncas-demo"
+  }
+}

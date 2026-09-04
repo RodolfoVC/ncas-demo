@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Contacto">
+  <section class="max-w-2xl mx-auto px-6 py-16">
+    <h1 class="text-3xl font-bold mb-2">Contacto</h1>
+    <p class="text-sm text-slate-500 mb-8">
+      Formulario de demostración. En producción, este formulario se conectaría a una función serverless
+      (endpoint <code>/api/contacto</code>) protegida con Cloudflare Turnstile, como se describe en la
+      recomendación de stack.
+    </p>
+    <form class="space-y-4" onsubmit="event.preventDefault(); alert('Demo: aquí se enviaría el formulario a /api/contacto');">
+      <div>
+        <label class="block text-sm font-medium mb-1" for="nombre">Nombre</label>
+        <input class="w-full border border-slate-300 rounded-md px-3 py-2" type="text" id="nombre" name="nombre" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1" for="email">Email</label>
+        <input class="w-full border border-slate-300 rounded-md px-3 py-2" type="email" id="email" name="email" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1" for="mensaje">Mensaje</label>
+        <textarea class="w-full border border-slate-300 rounded-md px-3 py-2" id="mensaje" name="mensaje" rows="5" required></textarea>
+      </div>
+      <button class="bg-brand text-white font-medium px-5 py-2 rounded-md hover:bg-brand-dark" type="submit">Enviar</button>
+    </form>
+  </section>
+</Base>

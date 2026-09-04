@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (contienen secretos reales, nunca se suben)
+.env
+.env.*
+!.env.example
+
+# Astro (frontend)
+frontend/.astro/
+frontend/dist/
+
+# Strapi (backend)
+backend/.tmp/
+backend/.strapi/
+backend/.strapi-updater.json
+backend/dist/
+backend/build/
+backend/public/uploads/
+
+# Sistema / editor
+.DS_Store
+.vscode/*
+!.vscode/settings.json
+*.log

@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPosts, type Post } from '../../lib/cms';
+
+// Astro genera un sitio estático: las rutas dinámicas necesitan sus paths
+// resueltos en build time. Esto significa que hay que reconstruir el sitio
+// (`npm run build`) cuando se publica contenido nuevo en Strapi — es el
+// trade-off normal de "static + headless CMS". Si se necesita que el blog
+// se actualice sin rebuild, la alternativa es cambiar Astro a output
+// "server"/"hybrid" con un adaptador (ej. @astrojs/node) para esta ruta.
+export async function getStaticPaths() {
+  let posts: Post[] = [];
+  try {
+    posts = await getPosts();
+  } catch (e) {
+    // Si el CMS no está disponible al momento del build, no se generan
+    // páginas de detalle — el listado /blog igual mostrará el aviso de error.
+    return [];
+  }
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const cmsError: string | null = null;
+---
+<Base title={post ? post.titulo : 'Post no encontrado'}>
+  <section class="max-w-3xl mx-auto px-6 py-16">
+    {cmsError ? (
+      <p class="text-red-600 text-sm">No se pudo cargar desde el CMS: {cmsError}</p>
+    ) : !post ? (
+      <p class="text-slate-500">No se encontró el artículo.</p>
+    ) : (
+      <article>
+        <a href="/blog" class="text-brand text-sm hover:underline">← Volver al blog</a>
+        <time class="block text-xs text-slate-400 mt-4">{new Date(post.fecha).toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+        <h1 class="text-3xl font-bold text-brand-dark mt-1 mb-6">{post.titulo}</h1>
+        <div class="prose prose-slate max-w-none whitespace-pre-line text-slate-700">{post.contenido}</div>
+      </article>
+    )}
+  </section>
+</Base>

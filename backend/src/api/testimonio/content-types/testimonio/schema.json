@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "testimonios",
+  "info": {
+    "singularName": "testimonio",
+    "pluralName": "testimonios",
+    "displayName": "Testimonio",
+    "description": "Testimonios de clientes, editables por el equipo de marketing sin ayuda de desarrollo."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "required": true
+    },
+    "empresa": {
+      "type": "string",
+      "required": true
+    },
+    "cita": {
+      "type": "text",
+      "required": true,
+      "maxLength": 500
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}
