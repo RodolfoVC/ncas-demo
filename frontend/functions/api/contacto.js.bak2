@@ -39,7 +39,7 @@ export async function onRequestPost(context) {
 
   if (!verifyData.success) {
     return new Response(
-      JSON.stringify({ error: 'No se pudo verificar que eres una persona real. Intenta de nuevo.' }),
+      JSON.stringify({ error: 'No se pudo verificar que eres una persona real. Intenta de nuevo.', debug: verifyData['error-codes'] }),
       { status: 400, headers: jsonHeaders }
     );
   }
