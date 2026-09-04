@@ -28,7 +28,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000000000000
       </div>
       <div>
         <label class="block text-sm font-medium mb-1" for="mensaje">Mensaje</label>
-        <textarea class="w-full border border-slate-300 rounded-md px-3 py-2" id="mensaje" name="mensaje" rows="5" required></textarea>
+        <textarea class="w-full border bg-white/5 border-white/15 text-ink placeholder:text-white/30 rounded-md px-3 py-2" id="mensaje" name="mensaje" rows="5" required></textarea>
       </div>
 
       <div class="cf-turnstile" data-sitekey={siteKey}></div>
@@ -63,7 +63,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x0000000000000000
 
       submitBtn.disabled = true;
       statusEl.textContent = 'Enviando...';
-      statusEl.className = 'text-sm mt-2 text-slate-500';
+      statusEl.className = 'text-sm mt-2 text-muted';
 
       try {
         const res = await fetch('/api/contacto', {

@@ -11,49 +11,86 @@ try {
 } catch (e) {
   cmsError = e instanceof Error ? e.message : 'No se pudo conectar con el CMS';
 }
-
-const servicios = [
-  { nombre: 'Software a medida', desc: 'Aplicaciones móviles, desktop, web y para smart TV.' },
-  { nombre: 'Hardware a medida', desc: 'Desarrollo industrial y de prototipos.' },
-  { nombre: 'Soporte', desc: 'Mantenimiento evolutivo y correctivo.' },
-  { nombre: 'Integración', desc: 'Conectividad entre APIs, software y hardware.' },
-  { nombre: 'Consultoría', desc: 'Arquitectura, infraestructura y gestión de equipos.' }
-];
 ---
 <Base title="Inicio" description="NCAS: ecosistemas tecnológicos escalables, mantenibles y robustos. Software y hardware a medida, soporte, integración y consultoría.">
-  <section class="bg-brand-light">
-    <div class="max-w-5xl mx-auto px-6 py-20 text-center">
-      <h1 class="text-4xl font-bold text-brand-dark mb-4">Ecosistemas tecnológicos escalables, mantenibles y robustos</h1>
-      <p class="text-slate-600 max-w-2xl mx-auto">Sitio de prueba construido con Astro + Tailwind CSS en el frontend y Strapi como CMS headless para los módulos autoadministrables (testimonios, proyectos y blog).</p>
+  <!-- HERO -->
+  <section class="dots relative overflow-hidden px-6 pt-24 pb-20 md:pt-32 md:pb-24">
+    <div class="hero-glow absolute -top-40 -right-28 w-[420px] h-[420px] md:w-[640px] md:h-[640px] rounded-full pointer-events-none"
+         style="background: radial-gradient(circle, #EF5D2C33 0%, transparent 70%); filter: blur(10px);"></div>
+    <div class="relative max-w-6xl mx-auto">
+      <div class="reveal reveal-1 inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full pl-3 pr-4 py-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-ok"></span>
+        <span class="font-mono text-xs text-white/70">Operando en 6 países de Latinoamérica</span>
+      </div>
+      <h1 class="reveal reveal-2 text-4xl md:text-6xl font-black leading-tight tracking-tight mt-7 max-w-2xl">
+        Software y<br>Hardware a tu<br>medida.
+      </h1>
+      <p class="reveal reveal-3 text-lg text-muted max-w-xl mt-6 leading-relaxed">
+        Desarrollamos en todas las plataformas y manejamos un gran número de integraciones.
+        Somos tu aliado perfecto para el desarrollo de soluciones en tecnología.
+      </p>
+      <div class="reveal reveal-4 flex flex-wrap gap-4 mt-9">
+        <a href="/contacto" class="bg-accent text-night font-extrabold text-sm px-7 py-3.5 rounded-lg">Contáctanos →</a>
+        <a href="/proyectos" class="border border-white/20 font-bold text-sm px-7 py-3.5 rounded-lg">Ver proyectos</a>
+      </div>
     </div>
   </section>
 
-  <section class="max-w-5xl mx-auto px-6 py-16">
-    <h2 class="text-2xl font-bold mb-8">Servicios</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {servicios.map((s) => (
-       <div class="group border border-slate-200 rounded-lg p-5 shadow-sm transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-brand dark:bg-slate-800 dark:border-slate-700">
-  <h3 class="font-semibold text-brand-dark mb-2 dark:text-brand-light">{s.nombre}</h3>
-  <p class="text-sm text-slate-600 dark:text-slate-300">{s.desc}</p>
-</div>
-      ))}
+  <!-- SERVICIOS -->
+  <section class="px-6 py-20 md:py-24">
+    <div class="max-w-6xl mx-auto">
+      <span class="font-mono text-xs font-semibold text-accent tracking-wide">SERVICIOS</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold mt-3">Cómo podemos apoyarte</h2>
+      <p class="text-muted max-w-xl mt-3">Soluciones integrales para lograr ecosistemas de tecnología escalables, mantenibles, robustos y con alta disponibilidad.</p>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
+        <div class="dots bg-card border border-white/10 rounded-2xl p-7">
+          <div class="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center text-accent">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13.5 6l-3 12"></path></svg>
+          </div>
+          <h3 class="font-bold mt-4">Software</h3>
+          <p class="text-sm text-muted mt-2 leading-relaxed">Desarrollo a medida para aplicaciones móviles, escritorio, web, smart TV y equipos periféricos.</p>
+        </div>
+        <div class="dots bg-card border border-white/10 rounded-2xl p-7">
+          <div class="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center text-accent">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.6"></rect><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"></path></svg>
+          </div>
+          <h3 class="font-bold mt-4">Hardware</h3>
+          <p class="text-sm text-muted mt-2 leading-relaxed">Desarrollo de hardware a medida con calidad y resistencia industrial o prototipos.</p>
+        </div>
+        <div class="dots bg-card border border-white/10 rounded-2xl p-7">
+          <div class="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center text-accent">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"></path><rect x="2.3" y="13" width="4" height="6.5" rx="1.6"></rect><rect x="17.7" y="13" width="4" height="6.5" rx="1.6"></rect></svg>
+          </div>
+          <h3 class="font-bold mt-4">Soporte</h3>
+          <p class="text-sm text-muted mt-2 leading-relaxed">Soporte evolutivo y correctivo de aplicaciones, servicios, infraestructura y periféricos.</p>
+        </div>
+        <div class="dots bg-card border border-white/10 rounded-2xl p-7">
+          <div class="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center text-accent">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.4"></circle><circle cx="18" cy="6" r="2.4"></circle><circle cx="12" cy="18" r="2.4"></circle><path d="M8.1 7.3L11 16M15.9 7.3L13 16M8.4 6h7.2"></path></svg>
+          </div>
+          <h3 class="font-bold mt-4">Integraciones</h3>
+          <p class="text-sm text-muted mt-2 leading-relaxed">Integraciones de software y hardware con distintas aplicaciones o APIs públicas y privadas.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="bg-slate-50">
-    <div class="max-w-5xl mx-auto px-6 py-16">
-      <h2 class="text-2xl font-bold mb-2">Testimonios</h2>
-      <p class="text-sm text-slate-500 mb-8">Contenido editable desde el panel de Strapi — módulo "Testimonios".</p>
+  <!-- TESTIMONIOS (dinámico desde Strapi) -->
+  <section class="bg-panel border-y border-white/10">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+      <span class="font-mono text-xs font-semibold text-accent2 tracking-wide">TESTIMONIOS</span>
+      <h2 class="text-3xl font-extrabold mt-3">Lo que dicen nuestros clientes</h2>
       {cmsError ? (
-        <p class="text-red-600 text-sm">No se pudo cargar desde el CMS: {cmsError}</p>
+        <p class="text-red-400 text-sm mt-6">No se pudo cargar desde el CMS: {cmsError}</p>
       ) : testimonios.length === 0 ? (
-        <p class="text-slate-500 text-sm">Aún no hay testimonios cargados en el CMS.</p>
+        <p class="text-muted text-sm mt-6">Aún no hay testimonios cargados en el CMS.</p>
       ) : (
-        <div class="grid sm:grid-cols-2 gap-6">
+        <div class="grid sm:grid-cols-2 gap-6 mt-10">
           {testimonios.map((t: any) => (
-            <blockquote class="bg-white border border-slate-200 rounded-lg p-6">
-              <p class="italic text-slate-700 mb-4">&ldquo;{t.cita}&rdquo;</p>
-              <footer class="text-sm font-medium text-brand-dark">{t.nombre} — {t.empresa}</footer>
+            <blockquote class="bg-card border border-white/10 rounded-2xl p-7">
+              <p class="italic text-ink/90 mb-4">&ldquo;{t.cita}&rdquo;</p>
+              <footer class="text-sm font-bold text-muted">{t.nombre} — {t.empresa}</footer>
             </blockquote>
           ))}
         </div>
@@ -61,23 +98,27 @@ const servicios = [
     </div>
   </section>
 
-  <section class="max-w-5xl mx-auto px-6 py-16">
-    <h2 class="text-2xl font-bold mb-2">Proyectos destacados</h2>
-    <p class="text-sm text-slate-500 mb-8">Contenido editable desde el panel de Strapi — módulo "Proyectos".</p>
-    {cmsError ? (
-      <p class="text-red-600 text-sm">No se pudo cargar desde el CMS.</p>
-    ) : proyectos.length === 0 ? (
-      <p class="text-slate-500 text-sm">Aún no hay proyectos cargados en el CMS.</p>
-    ) : (
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {proyectos.map((p: any) => (
-          <div class="border border-slate-200 rounded-lg p-5">
-            <span class="text-xs uppercase tracking-wide text-brand font-semibold">{p.industria}</span>
-            <h3 class="font-semibold text-brand-dark mt-1 mb-2">{p.nombre}</h3>
-            <p class="text-sm text-slate-600">{p.descripcion}</p>
-          </div>
-        ))}
-      </div>
-    )}
+  <!-- PROYECTOS DESTACADOS (dinámico desde Strapi) -->
+  <section class="px-6 py-20">
+    <div class="max-w-6xl mx-auto">
+      <span class="font-mono text-xs font-semibold text-accent2 tracking-wide">PROYECTOS</span>
+      <h2 class="text-3xl font-extrabold mt-3">Presentes en las industrias más exigentes</h2>
+      {cmsError ? (
+        <p class="text-red-400 text-sm mt-6">No se pudo cargar desde el CMS.</p>
+      ) : proyectos.length === 0 ? (
+        <p class="text-muted text-sm mt-6">Aún no hay proyectos cargados en el CMS.</p>
+      ) : (
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
+          {proyectos.map((p: any) => (
+            <div class="bg-card border border-white/10 border-t-2 rounded-xl p-6" style="border-top-color:#2ABEEF;">
+              <span class="font-mono text-xs uppercase tracking-wide text-accent2 font-semibold">{p.industria}</span>
+              <h3 class="font-bold mt-2 mb-2">{p.nombre}</h3>
+              <p class="text-sm text-muted">{p.descripcion}</p>
+            </div>
+          ))}
+        </div>
+      )}
+      <a href="/proyectos" class="inline-flex items-center gap-2 text-accent2 font-bold text-sm mt-8">Ver todos los proyectos →</a>
+    </div>
   </section>
 </Base>

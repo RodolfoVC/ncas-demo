@@ -18,39 +18,58 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title} · NCAS (demo)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;600&display=swap" />
+    <title>{title} · NCAS</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={`${title} · NCAS (demo)`} />
+    <meta property="og:title" content={`${title} · NCAS`} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
 
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content={`${title} · NCAS (demo)`} />
+    <meta name="twitter:title" content={`${title} · NCAS`} />
     <meta name="twitter:description" content={description} />
   </head>
-  <body class="min-h-screen bg-white text-slate-800 flex flex-col">
-    <header class="border-b border-slate-200">
-      <nav class="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
-        <a href="/" class="font-bold text-brand text-lg">NCAS <span class="text-slate-400 font-normal text-sm">(demo)</span></a>
-        <ul class="flex gap-6 text-sm font-medium">
-          <li><a href="/" class="hover:text-brand">Inicio</a></li>
-          <li><a href="/proyectos" class="hover:text-brand">Proyectos</a></li>
-          <li><a href="/equipo" class="hover:text-brand">Equipo</a></li>
-          <li><a href="/blog" class="hover:text-brand">Blog</a></li>
-          <li><a href="/contacto" class="hover:text-brand">Contacto</a></li>
+  <body class="min-h-screen bg-night text-ink flex flex-col">
+    <header class="border-b border-white/10">
+      <nav class="max-w-6xl mx-auto flex items-center justify-between px-6 py-5">
+        <a href="/" class="flex items-center gap-3">
+          <svg width="30" height="30" viewBox="0 0 24 24">
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="#EF5D2C"></rect>
+            <path d="M8 16V8l8 8V8" stroke="#0a0b0f" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="text-lg font-black tracking-tight">ncas</span>
+        </a>
+        <ul class="hidden md:flex gap-8 text-sm font-bold text-muted">
+          <li><a href="/" class="hover:text-ink">Inicio</a></li>
+          <li><a href="/proyectos" class="hover:text-ink">Proyectos</a></li>
+          <li><a href="/equipo" class="hover:text-ink">Equipo</a></li>
+          <li><a href="/blog" class="hover:text-ink">Blog</a></li>
+          <li><a href="/contacto" class="hover:text-ink">Contacto</a></li>
         </ul>
+        <a href="/contacto" class="bg-accent text-night font-extrabold text-sm px-5 py-2.5 rounded-lg">Contáctanos</a>
       </nav>
     </header>
     <main class="flex-1">
       <slot />
     </main>
-    <footer class="border-t border-slate-200 mt-16">
-      <div class="max-w-5xl mx-auto px-6 py-8 text-sm text-slate-500 flex justify-between">
-        <span>&copy; 2026 NCAS — sitio de prueba</span>
-        <span>Astro + Tailwind + Strapi</span>
+    <footer class="border-t border-white/10 mt-16">
+      <div class="max-w-6xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2.5">
+          <svg width="22" height="22" viewBox="0 0 24 24">
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="#EF5D2C"></rect>
+            <path d="M8 16V8l8 8V8" stroke="#0a0b0f" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="text-xs text-white/40">&copy; 2026 NCAS — todos los derechos reservados</span>
+        </div>
+        <div class="flex gap-6 text-xs font-semibold text-muted">
+          <a href="/" class="hover:text-ink">Servicios</a>
+          <a href="/proyectos" class="hover:text-ink">Proyectos</a>
+          <a href="/blog" class="hover:text-ink">Blog</a>
+          <a href="/contacto" class="hover:text-ink">Contacto</a>
+        </div>
       </div>
     </footer>
   </body>

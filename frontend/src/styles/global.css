@@ -1,3 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {
+    body {
+        @apply bg-night text-ink;
+    }
+}
+
+.dots {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 22px 22px;
+}
+
+@keyframes heroGlow {
+    0%,
+    100% {
+        transform: scale(0.88);
+        opacity: 0.4;
+    }
+    50% {
+        transform: scale(1.22);
+        opacity: 1;
+    }
+}
+
+.hero-glow {
+    animation: heroGlow 5s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal {
+    opacity: 0;
+    animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-1 {
+    animation-delay: 0.05s;
+}
+
+.reveal-2 {
+    animation-delay: 0.18s;
+}
+
+.reveal-3 {
+    animation-delay: 0.30s;
+}
+
+.reveal-4 {
+    animation-delay: 0.42s;
+}
